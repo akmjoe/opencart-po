@@ -1,5 +1,5 @@
 <?php
-class ControllerEventPo extends Controller {
+class controllerExtensionEventPo extends Controller {
 	public function index(&$route, &$data, &$output) {
 		if(!$this->config->get('module_po_status')) return;
 		$po = '';
@@ -9,8 +9,8 @@ class ControllerEventPo extends Controller {
 		}
 		$this->load->language('extension/module/po');
 		// add PO number field
-		$this->load->helper('simple_html_dom');
-		$html = str_get_html($output);
+		$html = new simple_html_dom();
+        $html->load($output, $lowercase = true, $stripRN = false, $defaultBRText = DEFAULT_BR_TEXT);
 		if($html->find('div#tab-payment',0)) {
 			$html->find('div#tab-payment', 0)->find('div.form-group', -1)->outertext .= 
 				'<div class="form-group"><label class="col-sm-2 control-label" for="po-number">'.$this->language->get('text_po').
@@ -29,8 +29,8 @@ class ControllerEventPo extends Controller {
 	public function order(&$route, &$data, &$output) {
 		$this->language->load('extension/module/po');
 		$po = $this->db->query('select * from '.DB_PREFIX.'order where order_id = "'.(int)$this->request->get['order_id'].'"');
-		$this->load->helper('simple_html_dom');
-		$html = str_get_html($output);
+		$html = new simple_html_dom();
+        $html->load($output, $lowercase = true, $stripRN = false, $defaultBRText = DEFAULT_BR_TEXT);
 		if($po->num_rows && $po->row['po_number']) {
 			$insert = '<tr><td><button type="button" data-toggle="tooltip" title="'.$this->language->get('text_po').'" class="btn btn-info btn-xs"><i class="fa fa-info fa-fw"></i></button></td>';
 			$insert .= '<td>'.$this->language->get('text_po').' '.$po->row['po_number'].'</td></tr>';

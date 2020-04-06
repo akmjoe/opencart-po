@@ -78,24 +78,24 @@ class ControllerExtensionModulePo extends Controller {
 		}
 		// now add triggers for admin to edit
 		$this->load->model('setting/event');
-		$this->model_setting_event->addEvent('po','admin/view/sale/order_form/after','event/po/index');
-		$this->model_setting_event->addEvent('po','admin/view/sale/order_info/after','event/po/order');
+		$this->model_setting_event->addEvent('po','admin/view/sale/order_form/after','extension/event/po/index');
+		$this->model_setting_event->addEvent('po','admin/view/sale/order_info/after','extension/event/po/order');
 		// add triggers for checkout to show field
-		$this->model_setting_event->addEvent('po','catalog/view/checkout/payment_method/after','event/po/payment');
-		$this->model_setting_event->addEvent('po','catalog/view/checkout/shipping_method/after','event/po/shipping');
+		$this->model_setting_event->addEvent('po','catalog/view/checkout/payment_method/after','extension/event/po/payment');
+		$this->model_setting_event->addEvent('po','catalog/view/checkout/shipping_method/after','extension/event/po/shipping');
 		// add triggers to save to session
-		$this->model_setting_event->addEvent('po','catalog/controller/checkout/payment_method/save/after','event/po/save');
-		$this->model_setting_event->addEvent('po','catalog/controller/checkout/shipping_method/save/after','event/po/save');
-		$this->model_setting_event->addEvent('po','catalog/controller/api/payment/address/after','event/po/save');
+		$this->model_setting_event->addEvent('po','catalog/controller/checkout/payment_method/save/after','extension/event/po/save');
+		$this->model_setting_event->addEvent('po','catalog/controller/checkout/shipping_method/save/after','extension/event/po/save');
+		$this->model_setting_event->addEvent('po','catalog/controller/api/payment/address/after','extension/event/po/save');
 		// add triggers to save with order
-		$this->model_setting_event->addEvent('po','catalog/model/checkout/order/addOrder/after','event/po/order');
-		$this->model_setting_event->addEvent('po','catalog/model/checkout/order/editOrder/after','event/po/order');
+		$this->model_setting_event->addEvent('po','catalog/model/checkout/order/addOrder/after','extension/event/po/order');
+		$this->model_setting_event->addEvent('po','catalog/model/checkout/order/editOrder/after','extension/event/po/order');
 		// add trigger to show with order confirmation
-		$this->model_setting_event->addEvent('po','catalog/view/checkout/confirm/before','event/po/confirm');
+		$this->model_setting_event->addEvent('po','catalog/view/checkout/confirm/before','extension/event/po/confirm');
 		// cleanup after order place/logout
-		$this->model_setting_event->addEvent('po', 'catalog/controller/checkout/success/after', 'event/po/clean');
-		$this->model_setting_event->addEvent('po', 'catalog/controller/account/logout/after', 'event/po/clean');
-		$this->model_setting_event->addEvent('po', 'catalog/controller/account/login/after', 'event/po/clean');
+		$this->model_setting_event->addEvent('po', 'catalog/controller/checkout/success/after', 'extension/event/po/clean');
+		$this->model_setting_event->addEvent('po', 'catalog/controller/account/logout/after', 'extension/event/po/clean');
+		$this->model_setting_event->addEvent('po', 'catalog/controller/account/login/after', 'extension/event/po/clean');
 	}
 
 	public function uninstall() {
