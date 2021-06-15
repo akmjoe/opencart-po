@@ -12,6 +12,15 @@ class controllerExtensionEventPo extends Controller {
             return;
         }
 		$this->load->language('extension/module/po');
+		// build blind checkbox
+		$blind_box = '';
+		if($this->config->get('module_po_blind')) {
+			$blind_box = '<div><label for="blind"><input type="checkbox" name="blind" value="1"'.
+				(isset($this->session->data['blind']) && $this->session->data['blind']?' checked="checked"':'').
+				'><strong> '.$this->language->get('text_blind').
+				' </strong></label>'.
+				(isset($this->session->data['po_number'])?$this->session->data['po_number']:'').'</textarea></div>';
+		}
 		// add PO number field
 		$html = new simple_html_dom();
         $html->load($output, $lowercase = true, $stripRN = false, $defaultBRText = DEFAULT_BR_TEXT);
@@ -19,6 +28,7 @@ class controllerExtensionEventPo extends Controller {
 			$node->outertext = '<div><label for="po-number"><strong>'.($this->required?$this->language->get('text_por'):$this->language->get('text_poo')).
 				' </strong></label><br><textarea name="po_number" id="po-number" rows="1">'.
 				(isset($this->session->data['po_number'])?$this->session->data['po_number']:'').'</textarea></div>'.
+				$blind_box .
 				$node->outertext;
 		}
 		$output = $html->save();
@@ -31,6 +41,15 @@ class controllerExtensionEventPo extends Controller {
             return;
         }
 		$this->load->language('extension/module/po');
+		// build blind checkbox
+		$blind_box = '';
+		if($this->config->get('module_po_blind')?'':'') {
+			$blind_box = '<div><label for="blind"><input type="checkbox" name="blind" value="1"'.
+				(isset($this->session->data['blind']) && $this->session->data['blind']?' checked="checked"':'').
+				'><strong>'.$this->language->get('text_blind').
+				' </strong></label>'.
+				(isset($this->session->data['po_number'])?$this->session->data['po_number']:'').'</textarea></div>';
+		}
 		// add PO number field
 		$html = new simple_html_dom();
         $html->load($output, $lowercase = true, $stripRN = false, $defaultBRText = DEFAULT_BR_TEXT);
@@ -38,6 +57,7 @@ class controllerExtensionEventPo extends Controller {
 			$node->outertext = '<div><label for="po-number"><strong>'.($this->required?$this->language->get('text_por'):$this->language->get('text_poo')).
 				' </strong></label><br><textarea name="po_number" id="po-number" rows="1">'.
 				(isset($this->session->data['po_number'])?$this->session->data['po_number']:'').'</textarea></div>'.
+				$blind_box .
 				$node->outertext;
 		}
 		$output = $html->save();
@@ -47,13 +67,18 @@ class controllerExtensionEventPo extends Controller {
 	    if($this->active()) {
 		    if(isset($this->request->post['po_number']))
 			    $this->session->data['po_number'] = $this->request->post['po_number'];
+		    if(isset($this->request->post['blind'])) {
+			    $this->session->data['blind'] = $this->request->post['blind'];
+			} else {
+				unset($this->session->data['blind']);
+			}
 	    }
     }
     
     public function order(&$route, &$data, &$output = null) {
 	    if($this->active() && isset($this->session->data['po_number'])) {
 		    // save po to order
-		    $this->db->query('update '.DB_PREFIX.'order set po_number="'.$this->db->escape($this->session->data['po_number']).'" where order_id='.((int)$output?(int)$output:(int)$data[0]));
+		    $this->db->query('update '.DB_PREFIX.'order set po_number="'.$this->db->escape($this->session->data['po_number']).'", blind='.(int)$this->session->data['blind'].'  where order_id='.((int)$output?(int)$output:(int)$data[0]));
 	    }
     }
     

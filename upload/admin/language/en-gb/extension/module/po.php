@@ -14,7 +14,8 @@ $_['text_both']  = 'Both';
 
 // Entry
 $_['entry_page']        = 'Page';
-$_['entry_status']       = 'Status';
+$_['entry_blind']       = 'Show Blind ship option';
+$_['entry_status']      = 'Status';
 
 // Help
 $_['help_page']         = 'The PO number field will be displayed on this checkout page.';

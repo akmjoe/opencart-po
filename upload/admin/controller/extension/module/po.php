@@ -51,6 +51,17 @@ class ControllerExtensionModulePo extends Controller {
 			$data['module_po_page'] = $this->config->get('module_po_page');
 		}
 		
+		if (isset($this->request->post['module_po_blind'])) {
+			$data['module_po_blind'] = $this->request->post['module_po_blind'];
+		} else {
+			$data['module_po_blind'] = $this->config->get('module_po_blind');
+		}
+		if (isset($this->request->post['module_po_status'])) {
+			$data['module_po_status'] = $this->request->post['module_po_status'];
+		} else {
+			$data['module_po_status'] = $this->config->get('module_po_status');
+		}
+		
 		$data['pages'] = array(
 			array('page'=>'shipping', 'name'=>$this->language->get('text_shipping')),
 			array('page'=>'payment', 'name'=>$this->language->get('text_payment')),
@@ -75,6 +86,16 @@ class ControllerExtensionModulePo extends Controller {
 		}
 		if(!$po) {
 			$this->db->query('ALTER TABLE `'.DB_PREFIX.'order` ADD `po_number` varchar(24)');
+		}
+		// add db field for blind
+		$blind = false;
+		foreach($fields->rows as $row) {
+			if($row['Field'] == 'blind') {
+				$blind = true;
+			}
+		}
+		if(!$blind) {
+			$this->db->query('ALTER TABLE `'.DB_PREFIX.'order` ADD `blind` tinyint not null default 0');
 		}
 		// now add triggers for admin to edit
 		$this->load->model('setting/event');
