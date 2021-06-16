@@ -78,7 +78,7 @@ class controllerExtensionEventPo extends Controller {
     public function order(&$route, &$data, &$output = null) {
 	    if($this->active() && isset($this->session->data['po_number'])) {
 		    // save po to order
-		    $this->db->query('update '.DB_PREFIX.'order set po_number="'.$this->db->escape($this->session->data['po_number']).'", blind='.(int)$this->session->data['blind'].'  where order_id='.((int)$output?(int)$output:(int)$data[0]));
+		    $this->db->query('update '.DB_PREFIX.'order set po_number="'.$this->db->escape($this->session->data['po_number']).'", blind='.(isset($this->session->data['blind'])?(int)$this->session->data['blind']:0).'  where order_id='.((int)$output?(int)$output:(int)$data[0]));
 	    }
     }
     
