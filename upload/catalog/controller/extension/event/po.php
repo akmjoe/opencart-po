@@ -89,6 +89,21 @@ class controllerExtensionEventPo extends Controller {
 		    $data['po_number'] = $this->session->data['po_number'];
 	    }
     }
+	
+	public function history(&$route, &$data, &$output = null) {
+		$this->load->model('extension/module/po');
+		if(isset($data['orders'])) {
+			foreach($data['orders'] as &$order) {
+				$order['po_number'] = $po = $this->model_extension_module_po->getPoNumber($order['order_id']);
+			}
+		}
+		if(isset($data['order_id'])) {
+			$data['po_number'] = $po = $this->model_extension_module_po->getPoNumber($data['order_id']);
+		}
+		$this->load->language('extension/module/po');
+		$data['text_po_number'] = $this->language->get('text_po');
+		$data['column_po'] = $this->language->get('column_po');
+	}
     
     protected function active($page = 'ignore') {
 	    if($this->config->get('module_po_status')) {
