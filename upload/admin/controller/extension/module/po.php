@@ -32,7 +32,7 @@ class ControllerExtensionModulePo extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_extension'),
-			'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true)
+			'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module', true)
 		);
 
 		$data['breadcrumbs'][] = array(
@@ -42,7 +42,7 @@ class ControllerExtensionModulePo extends Controller {
 
 		$data['action'] = $this->url->link('extension/module/po', 'user_token=' . $this->session->data['user_token'], true);
 
-		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true);
+		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module', true);
 
 		
 		if (isset($this->request->post['module_po_page'])) {
