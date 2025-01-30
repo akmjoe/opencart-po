@@ -117,6 +117,9 @@ class ControllerExtensionModulePo extends Controller {
 		$this->model_setting_event->addEvent('po', 'catalog/controller/checkout/success/after', 'extension/event/po/clean');
 		$this->model_setting_event->addEvent('po', 'catalog/controller/account/logout/after', 'extension/event/po/clean');
 		$this->model_setting_event->addEvent('po', 'catalog/controller/account/login/after', 'extension/event/po/clean');
+		// add triggers to show on order history page
+		$this->model_setting_event->addEvent('po', 'catalog/view/account/order_list/before', 'extension/event/po/history');
+		$this->model_setting_event->addEvent('po', 'catalog/view/account/order_info/before', 'extension/event/po/history');
 	}
 
 	public function uninstall() {

@@ -5,4 +5,20 @@
 	<author>Joe Rothrock</author>
 	<link>https://github.com/akmjoe</link>
 	<code>opencart-customer-po</code>
+    <file path="catalog/view/theme/*/template/account/order_list.twig">
+        <operation error="skip" info="To add po number">
+            <search><![CDATA[<td class="text-right">{{ column_order_id }}</td>]]></search>
+            <add position="after"><![CDATA[<td class="text-right">{{ column_po }}</td>]]></add>
+        </operation>
+        <operation error="skip" info="To add po number">
+            <search><![CDATA[<td class="text-right">#{{ order.order_id }}</td>]]></search>
+            <add position="after"><![CDATA[<td class="text-right">{{ order.po_number }}</td>]]></add>
+        </operation>
+    </file>
+    <file path="catalog/view/theme/default/template/account/order_info.twig">
+        <operation error="skip" info="To add po number">
+            <search><![CDATA[<b>{{ text_date_added }}</b> {{ date_added }}</td>]]></search>
+            <add position="before"><![CDATA[{% if po_number %}<b>{{ text_po_number }}</b> {{ po_number }}<br />{% endif %}]]></add>
+        </operation>
+    </file>
 </modification>
