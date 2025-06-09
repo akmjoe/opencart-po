@@ -17,9 +17,8 @@ class controllerExtensionEventPo extends Controller {
 		if($this->config->get('module_po_blind')) {
 			$blind_box = '<div><label for="blind"><input type="checkbox" name="blind" value="1"'.
 				(isset($this->session->data['blind']) && $this->session->data['blind']?' checked="checked"':'').
-				'><strong> '.$this->language->get('text_blind').
-				' </strong></label>'.
-				(isset($this->session->data['po_number'])?$this->session->data['po_number']:'').'</textarea></div>';
+				'><strong>'.$this->language->get('text_blind').
+				'</strong></label></div>';
 		}
 		// add PO number field
 		$html = new simple_html_dom();
