@@ -7,59 +7,32 @@ class controllerExtensionEventPo extends Controller {
 	}
 	
     public function payment(&$route, &$data, &$output) {
-        // check if this module is enabled
-        if(!$this->active('payment')) {
-            return;
+        if($this->active('payment')) {
+            $output = $this->load->view('extension/module/po_payment', $data).$output;
         }
-		$this->load->language('extension/module/po');
-		// build blind checkbox
-		$blind_box = '';
-		if($this->config->get('module_po_blind')) {
-			$blind_box = '<div><label for="blind"><input type="checkbox" name="blind" value="1"'.
-				(isset($this->session->data['blind']) && $this->session->data['blind']?' checked="checked"':'').
-				'><strong>'.$this->language->get('text_blind').
-				'</strong></label></div>';
-		}
-		// add PO number field
-		$html = new simple_html_dom();
-        $html->load($output, $lowercase = true, $stripRN = false, $defaultBRText = DEFAULT_BR_TEXT);
-		foreach($html->find('div.buttons') as $node) {
-			$node->outertext = '<div><label for="po-number"><strong>'.($this->required?$this->language->get('text_por'):$this->language->get('text_poo')).
-				' </strong></label><br><textarea name="po_number" id="po-number" rows="1">'.
-				(isset($this->session->data['po_number'])?$this->session->data['po_number']:'').'</textarea></div>'.
-				$blind_box .
-				$node->outertext;
-		}
-		$output = $html->save();
-		$this->response->setOutput($html->save());
     }
     
     public function shipping(&$route, &$data, &$output) {
+        if($this->active('shipping')) {
+            $output = $this->load->view('extension/module/po_payment', $data).$output;
+        }
+    }
+    
+    public function before_view(&$route, &$data, &$output) {
         // check if this module is enabled
-        if(!$this->active('shipping')) {
+        if(!$this->config->get('module_po_status')) {
             return;
         }
-		$this->load->language('extension/module/po');
-		// build blind checkbox
-		$blind_box = '';
-		if($this->config->get('module_po_blind')?'':'') {
-			$blind_box = '<div><label for="blind"><input type="checkbox" name="blind" value="1"'.
-				(isset($this->session->data['blind']) && $this->session->data['blind']?' checked="checked"':'').
-				'><strong>'.$this->language->get('text_blind').
-				' </strong></label>'.
-				(isset($this->session->data['po_number'])?$this->session->data['po_number']:'').'</textarea></div>';
-		}
-		// add PO number field
-		$html = new simple_html_dom();
-        $html->load($output, $lowercase = true, $stripRN = false, $defaultBRText = DEFAULT_BR_TEXT);
-		foreach($html->find('div.buttons') as $node) {
-			$node->outertext = '<div><label for="po-number"><strong>'.($this->required?$this->language->get('text_por'):$this->language->get('text_poo')).
-				' </strong></label><br><textarea name="po_number" id="po-number" rows="1">'.
-				(isset($this->session->data['po_number'])?$this->session->data['po_number']:'').'</textarea></div>'.
-				$blind_box .
-				$node->outertext;
-		}
-		$output = $html->save();
+        // load required parameters
+	$this->load->language('extension/module/po');
+        
+        if($this->config->get('module_po_blind')) {
+            $data['text_blind'] = $this->language->get('text_blind');
+        }
+        $data['text_po'] = ($this->required?$this->language->get('text_por'):$this->language->get('text_poo'));
+        $data['blind'] = (isset($this->session->data['blind']) && $this->session->data['blind']?1:0);
+        $data['po_number'] = (isset($this->session->data['po_number'])?$this->session->data['po_number']:'');
+        $data['module_po_page'] = $this->config->get('module_po_page');
     }
     
     public function save(&$route, &$data) {
@@ -68,10 +41,11 @@ class controllerExtensionEventPo extends Controller {
 			    $this->session->data['po_number'] = $this->request->post['po_number'];
 		    if(isset($this->request->post['blind'])) {
 			    $this->session->data['blind'] = $this->request->post['blind'];
-			} else {
+                    } elseif(isset($this->request->post['blind_flag'])) {
 				unset($this->session->data['blind']);
-			}
+                    }
 	    }
+        $this->log->write($this->session->data['blind']);
     }
     
     public function order(&$route, &$data, &$output = null) {

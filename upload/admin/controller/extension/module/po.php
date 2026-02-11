@@ -11,6 +11,7 @@ class ControllerExtensionModulePo extends Controller {
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('module_po', $this->request->post);
+                        $this->update();
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -66,6 +67,7 @@ class ControllerExtensionModulePo extends Controller {
 			array('page'=>'shipping', 'name'=>$this->language->get('text_shipping')),
 			array('page'=>'payment', 'name'=>$this->language->get('text_payment')),
 			array('page'=>'both', 'name'=>$this->language->get('text_both')),
+			array('page'=>'template', 'name'=>$this->language->get('text_template')),
 		);
 		
 		$data['header'] = $this->load->controller('common/header');
@@ -97,13 +99,22 @@ class ControllerExtensionModulePo extends Controller {
 		if(!$blind) {
 			$this->db->query('ALTER TABLE `'.DB_PREFIX.'order` ADD `blind` tinyint not null default 0');
 		}
-		// now add triggers for admin to edit
+		$this->update();
+	}
+        
+        public function update() {
+		// remove event triggers
 		$this->load->model('setting/event');
-		$this->model_setting_event->addEvent('po','admin/view/sale/order_form/after','extension/event/po/index');
-		$this->model_setting_event->addEvent('po','admin/view/sale/order_info/after','extension/event/po/order');
+		$this->model_setting_event->deleteEventByCode('po');
+		// now add triggers for admin to edit
+		$this->model_setting_event->addEvent('po','admin/view/sale/order_form/before','extension/event/po/index');
+		$this->model_setting_event->addEvent('po','admin/view/sale/order_info/before','extension/event/po/order');
 		// add triggers for checkout to show field
 		$this->model_setting_event->addEvent('po','catalog/view/checkout/payment_method/after','extension/event/po/payment');
 		$this->model_setting_event->addEvent('po','catalog/view/checkout/shipping_method/after','extension/event/po/shipping');
+                
+		$this->model_setting_event->addEvent('po','catalog/view/checkout/payment_method/before','extension/event/po/before_view');
+		$this->model_setting_event->addEvent('po','catalog/view/checkout/shipping_method/before','extension/event/po/before_view');
 		// add triggers to save to session
 		$this->model_setting_event->addEvent('po','catalog/controller/checkout/payment_method/save/after','extension/event/po/save');
 		$this->model_setting_event->addEvent('po','catalog/controller/checkout/shipping_method/save/after','extension/event/po/save');
@@ -120,10 +131,11 @@ class ControllerExtensionModulePo extends Controller {
 		// add triggers to show on order history page
 		$this->model_setting_event->addEvent('po', 'catalog/view/account/order_list/before', 'extension/event/po/history');
 		$this->model_setting_event->addEvent('po', 'catalog/view/account/order_info/before', 'extension/event/po/history');
-	}
+            
+        }
 
 	public function uninstall() {
-		// remove evant triggers
+		// remove event triggers
 		$this->load->model('setting/event');
 		$this->model_setting_event->deleteEventByCode('po');
 	}

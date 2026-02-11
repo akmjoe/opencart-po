@@ -1,0 +1,20 @@
+{% if text_blind %}
+<div>
+    <label for="blind">
+        {% if blind %}
+            <input type="checkbox" name="blind" value="1" checked="checked">
+        {% else %}
+            <input type="checkbox" name="blind" value="1">
+        {% endif %}
+        <strong>{{ text_blind }}</strong>
+    </label>
+    <input type="text" name="blind_flag" style="display:none;">
+</div>
+{% endif %}
+<div>
+    <label for="po-number">
+        <strong>{{ text_po }}</strong>
+    </label>
+    <br>
+    <textarea name="po_number" id="po-number" rows="1">{{ po_number }}</textarea>
+</div>
