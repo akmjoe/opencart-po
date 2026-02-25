@@ -24,7 +24,7 @@ class controllerExtensionEventPo extends Controller {
             return;
         }
         // load required parameters
-	$this->load->language('extension/module/po');
+		$this->load->language('extension/module/po');
         
         if($this->config->get('module_po_blind')) {
             $data['text_blind'] = $this->language->get('text_blind');
@@ -45,7 +45,6 @@ class controllerExtensionEventPo extends Controller {
 				unset($this->session->data['blind']);
                     }
 	    }
-        $this->log->write($this->session->data['blind']);
     }
     
     public function order(&$route, &$data, &$output = null) {
@@ -56,7 +55,7 @@ class controllerExtensionEventPo extends Controller {
     }
     
     public function confirm(&$route, &$data) {
-	    if($this->active() && $this->session->data['po_number']) {
+	    if($this->active() && isset($this->session->data['po_number'])) {
 		    // make po number available for template
 		    $this->load->language('extension/module/po');
 		    $data['po_number'] = $this->session->data['po_number'];
