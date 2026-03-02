@@ -29,7 +29,7 @@
       <div class="panel-body">
         <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-payment" class="form-horizontal">
           <div class="form-group">
-            <label class="col-sm-2 control-label" for="input-page">{{ entry_page }}</label>
+              <label class="col-sm-2 control-label" for="input-page"><span data-toggle="tooltip" title="{{ help_page }}">{{ entry_page }}</span></label>
             <div class="col-sm-10">
               <select name="module_po_page" id="input-page" class="form-control">
                 {% for page in pages %}

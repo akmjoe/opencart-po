@@ -8,9 +8,10 @@ $_['text_extension']     = 'Extensions';
 $_['text_success']       = 'Success: You have modified PO Number module!';
 $_['text_desc']          = 'PO Number field will be available for all customers. It will be required for selected customers.';
 $_['text_open_account']  = 'Open Account';
-$_['text_shipping']  = 'Shipping Method';
-$_['text_payment']  = 'Payment Method';
-$_['text_both']  = 'Both';
+$_['text_shipping']     = 'Shipping Method';
+$_['text_payment']      = 'Payment Method';
+$_['text_both']         = 'Both';
+$_['text_template']     = 'Template';
 
 // Entry
 $_['entry_page']        = 'Page';
@@ -18,7 +19,7 @@ $_['entry_blind']       = 'Show Blind ship option';
 $_['entry_status']      = 'Status';
 
 // Help
-$_['help_page']         = 'The PO number field will be displayed on this checkout page.';
+$_['help_page']         = 'The PO number field will be displayed at the beginning of this checkout section. If set to Template, your template will need to handle it instead.';
 
 // Error
 $_['error_permission']   = 'Warning: You do not have permission to modify PO Number module!';
